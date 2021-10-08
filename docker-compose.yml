@@ -1,0 +1,82 @@
+version: '3.2'
+services:
+
+  minecraft-north:
+    image: ghcr.io/iceoid/minecraft-bedrock-docker:main
+    container_name: minecraft-north
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    restart: always
+    networks:
+      - traefik_net
+    ports:
+      - 19132:19132/udp
+      - 19132:19132/tcp
+    volumes:
+      - type: bind
+        source: ./north/config
+        target: /bedrock-server/config
+      - type: bind
+        source: ./north/worlds
+        target: /bedrock-server/worlds
+
+  minecraft-kingdom:
+    image: ghcr.io/iceoid/minecraft-bedrock-docker:main
+    container_name: minecraft-kingdom
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    restart: always
+    networks:
+      - traefik_net
+    ports:
+      - 19142:19132/udp
+      - 19142:19132/tcp
+    volumes:
+      - type: bind
+        source: ./kingdom/config
+        target: /bedrock-server/config
+      - type: bind
+        source: ./kingdom/worlds
+        target: /bedrock-server/worlds
+
+  minecraft-caves:
+    image: ghcr.io/iceoid/minecraft-bedrock-docker:main
+    container_name: minecraft-caves
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    restart: always
+    networks:
+      - traefik_net
+    ports:
+      - 19133:19132/udp
+      - 19133:19132/tcp
+    volumes:
+      - type: bind
+        source: ./caves/config
+        target: /bedrock-server/config
+      - type: bind
+        source: ./caves/worlds
+        target: /bedrock-server/worlds
+        
+  minecraft-lush:
+    image: ghcr.io/iceoid/minecraft-bedrock-docker:main
+    container_name: minecraft-lush
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    networks:
+      - traefik_net
+    restart: always
+    ports:
+      - 19134:19132/udp
+      - 19134:19132/tcp
+    volumes:
+      - type: bind
+        source: ./lush/config
+        target: /bedrock-server/config
+      - type: bind
+        source: ./lush/worlds
+        target: /bedrock-server/worlds
+
+networks:
+  traefik_net:
+    external: true

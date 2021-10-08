@@ -19,6 +19,9 @@ services:
       - type: bind
         source: ./north/worlds
         target: /bedrock-server/worlds
+      - type: volume
+        source: minecraft-servers-info
+        target: /bedrock-server/info
 
   minecraft-kingdom:
     image: ghcr.io/iceoid/minecraft-bedrock-docker:main
@@ -38,6 +41,9 @@ services:
       - type: bind
         source: ./kingdom/worlds
         target: /bedrock-server/worlds
+      - type: volume
+        source: minecraft-servers-info
+        target: /bedrock-server/info
 
   minecraft-caves:
     image: ghcr.io/iceoid/minecraft-bedrock-docker:main
@@ -57,7 +63,10 @@ services:
       - type: bind
         source: ./caves/worlds
         target: /bedrock-server/worlds
-        
+      - type: volume
+        source: minecraft-servers-info
+        target: /bedrock-server/info
+
   minecraft-lush:
     image: ghcr.io/iceoid/minecraft-bedrock-docker:main
     container_name: minecraft-lush
@@ -76,7 +85,13 @@ services:
       - type: bind
         source: ./lush/worlds
         target: /bedrock-server/worlds
+      - type: volume
+        source: minecraft-servers-info
+        target: /bedrock-server/info
 
 networks:
   traefik_net:
     external: true
+
+volumes:
+  minecraft-servers-info:

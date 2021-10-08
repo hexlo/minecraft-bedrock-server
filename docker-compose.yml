@@ -2,7 +2,7 @@ version: '3.2'
 services:
 
   minecraft-north:
-    image: ghcr.io/iceoid/minecraft-bedrock-docker:main
+    image: ghcr.io/iceoid/minecraft-bedrock-server:main
     container_name: minecraft-north
     stdin_open: true # docker run -i
     tty: true        # docker run -t
@@ -24,7 +24,7 @@ services:
         target: /bedrock-server/info
 
   minecraft-kingdom:
-    image: ghcr.io/iceoid/minecraft-bedrock-docker:main
+    image: ghcr.io/iceoid/minecraft-bedrock-server:main
     container_name: minecraft-kingdom
     stdin_open: true # docker run -i
     tty: true        # docker run -t
@@ -46,7 +46,7 @@ services:
         target: /bedrock-server/info
 
   minecraft-caves:
-    image: ghcr.io/iceoid/minecraft-bedrock-docker:main
+    image: ghcr.io/iceoid/minecraft-bedrock-server:main
     container_name: minecraft-caves
     stdin_open: true # docker run -i
     tty: true        # docker run -t
@@ -68,7 +68,7 @@ services:
         target: /bedrock-server/info
 
   minecraft-lush:
-    image: ghcr.io/iceoid/minecraft-bedrock-docker:main
+    image: ghcr.io/iceoid/minecraft-bedrock-server:main
     container_name: minecraft-lush
     stdin_open: true # docker run -i
     tty: true        # docker run -t

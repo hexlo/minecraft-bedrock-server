@@ -17,7 +17,7 @@ version: '3'
 services:
 
   minecraft-server:
-    image: iceoid/minecraft-bedrock-server:latest
+    image: ghcr.io/iceoid/minecraft-bedrock-server:latest
     container_name: minecraft-server
     stdin_open: true # docker run -i
     tty: true        # docker run -t

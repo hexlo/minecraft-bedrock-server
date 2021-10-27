@@ -1,7 +1,7 @@
 pipeline {
   environment {
     imageName = "minecraft-bedrock-server"
-    dockerhubRegistry = "iceoid/+ $imageName"
+    dockerhubRegistry = "iceoid/$imageName"
     githubRegistry = "ghcr.io/iceoid/$imageName"
     dockerhubCredentials = 'DOCKERHUB_TOKEN'
     githubCredentials = 'GITHUB_TOKEN'

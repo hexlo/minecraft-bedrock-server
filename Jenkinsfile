@@ -31,7 +31,7 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', dockerhubCredentials ) {
-            dockerhubImage.push()
+//             dockerhubImage.push()
             dockerhubImageLatest.push()
           }
           docker.withRegistry('https://' + githubRegistry, githubCredentials) {

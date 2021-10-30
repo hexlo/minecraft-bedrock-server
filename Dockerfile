@@ -2,7 +2,7 @@ FROM ubuntu:focal
 
 ARG VER=latest
 
-ENV VERSION=$VER
+ENV VERSION=$ARG
 
 RUN apt update && apt install -y curl unzip
 

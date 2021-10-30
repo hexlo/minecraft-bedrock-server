@@ -21,9 +21,9 @@ pipeline {
       steps{
         script {
 //           dockerhubImage = docker.build dockerhubRegistry + ":$BUILD_NUMBER"
-          dockerhubImageLatest = docker.build(dockerhubRegistry + ":latest", "--no-cache --build-arg VERSION=latest") 
+          dockerhubImageLatest = docker.build(":latest", "--no-cache --build-arg VERSION=latest") dockerhubRegistry
           
-          githubImage = docker.build(githubRegistry + ":latest", "--no-cache --build-arg VERSION=latest")
+          githubImage = docker.build(":latest", "--no-cache --build-arg VERSION=latest") githubRegistry
         }
       }
     }

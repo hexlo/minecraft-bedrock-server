@@ -1,6 +1,6 @@
 FROM ubuntu:focal
 
-ENV VERSION=latest
+ARG VERSION=latest
 
 RUN apt update && apt install -y curl unzip
 

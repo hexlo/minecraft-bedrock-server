@@ -1,8 +1,12 @@
 pipeline {
   environment {
+    userName = "hexlo"
     imageName = "minecraft-bedrock-server"
-    dockerhubRegistry = "iceoid/$imageName"
-    githubRegistry = "ghcr.io/iceoid/$imageName"
+    tag = ":latest"
+    gitRepo = "https://github.com/${username}/${imageName}.git"
+    dockerhubRegistry = "${userName}/${imageName}"
+    githubRegistry = "ghcr.io/${userName}/${imageName}"
+    
     dockerhubCredentials = 'DOCKERHUB_TOKEN'
     githubCredentials = 'GITHUB_TOKEN'
     
@@ -14,27 +18,27 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git branch: 'main', credentialsId: 'GITHUB_TOKEN', url: 'https://github.com/Iceoid/minecraft-bedrock-server.git'
+        git branch: 'main', credentialsId: ${githubCredentials}, url: ${gitRepo}
       }
     }
     stage('Building image') {
       steps{
         script {
 //           dockerhubImage = docker.build dockerhubRegistry + ":$BUILD_NUMBER"
-          dockerhubImageLatest = docker.build(dockerhubRegistry + ":latest") 
+          dockerhubImageLatest = docker.build(${dockerhubRegistry} + ${tag}) 
           
-          githubImage = docker.build(githubRegistry + ":latest")
+          githubImage = docker.build(${githubRegistry} + ${tag})
         }
       }
     }
     stage('Deploy Image') {
       steps{
         script {
-          docker.withRegistry( '', dockerhubCredentials ) {
+          docker.withRegistry( '', ${dockerhubCredentials} ) {
 //             dockerhubImage.push()
             dockerhubImageLatest.push()
           }
-          docker.withRegistry('https://' + githubRegistry, githubCredentials) {
+          docker.withRegistry('https://' + ${githubRegistry}, ${githubCredentials}) {
             githubImage.push()
           }
         }
@@ -43,8 +47,8 @@ pipeline {
     stage('Remove Unused docker image') {
       steps{
 //         sh "docker rmi $dockerhubRegistry$imageName:$BUILD_NUMBER"
-        sh "docker rmi $dockerhubRegistry:latest"
-        sh "docker rmi $githubRegistry:latest"
+        sh "docker rmi ${dockerhubRegistry}${tag}"
+        sh "docker rmi ${githubRegistry}${tag}"
       }
     }
   }
@@ -54,7 +58,7 @@ pipeline {
         Build Number: ${env.BUILD_NUMBER} <br> \
         Status: <b>Failed</b> <br> \
         Build URL: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', \
-        subject: "Jenkins Build Failed: ${env.JOB_NAME}", to: "alerts@mindlab.dev";  
+        subject: "Jenkins Build Failed: ${env.JOB_NAME}", to: "jenkins@mindlab.dev";  
 
     }
   }

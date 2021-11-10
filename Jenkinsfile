@@ -18,27 +18,27 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git branch: 'main', credentialsId: ${githubCredentials}, url: ${gitRepo}
+        git branch: 'main', credentialsId: "${githubCredentials}", url: "${gitRepo}"
       }
     }
     stage('Building image') {
       steps{
         script {
 //           dockerhubImage = docker.build dockerhubRegistry + ":$BUILD_NUMBER"
-          dockerhubImageLatest = docker.build(${dockerhubRegistry} + ${tag}) 
+          dockerhubImageLatest = docker.build( "${dockerhubRegistry}${tag}" ) 
           
-          githubImage = docker.build(${githubRegistry} + ${tag})
+          githubImage = docker.build( "${githubRegistry}${tag}" )
         }
       }
     }
     stage('Deploy Image') {
       steps{
         script {
-          docker.withRegistry( '', ${dockerhubCredentials} ) {
+          docker.withRegistry( '', "${dockerhubCredentials}" ) {
 //             dockerhubImage.push()
             dockerhubImageLatest.push()
           }
-          docker.withRegistry('https://' + ${githubRegistry}, ${githubCredentials}) {
+          docker.withRegistry("https://${githubRegistry}", "${githubCredentials}" ) {
             githubImage.push()
           }
         }

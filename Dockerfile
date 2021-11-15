@@ -16,7 +16,7 @@ RUN mkdir -p /bedrock-server/config /bedrock-server/worlds /bedrock-server/info 
     &&  export VERSION=${LATEST_VERSION}; fi \
     && echo "VERSION=${VERSION}" \
     && echo "${VERSION}" > /bedrock-server/info/version.txt \
-    && echo "${VERSION}" > /bedrock-server/info/local-version.txt \
+    && touch /bedrock-server/local-version.txt && echo "${VERSION}" > /bedrock-server/local-version.txt \
     && curl https://minecraft.azureedge.net/bin-linux/bedrock-server-${VERSION}.zip --output bedrock-server.zip && unzip bedrock-server.zip -d bedrock-server && rm bedrock-server.zip \
     && mv -vn /bedrock-server/whitelist.json /bedrock-server/config/whitelist.json && mv -vn /bedrock-server/permissions.json /bedrock-server/config/permissions.json && mv -vn /bedrock-server/server.properties /bedrock-server/config/server.properties \
     && ln -s /bedrock-server/config/whitelist.json /bedrock-server/whitelist.json && ln -s /bedrock-server/config/permissions.json /bedrock-server/permissions.json && ln -s /bedrock-server/config/server.properties /bedrock-server/server.properties \

@@ -8,6 +8,8 @@ RUN apt update && apt install -y curl unzip nano
 
 ENV LATEST_VERSION=""
 
+COPY start-server.sh /bedrock-server/start-server.sh
+
 ### Install Script
 RUN mkdir -p /bedrock-server/config /bedrock-server/worlds /bedrock-server/info \
     && if [ "$VERSION" = "latest" ]; then \
@@ -20,6 +22,7 @@ RUN mkdir -p /bedrock-server/config /bedrock-server/worlds /bedrock-server/info 
     && curl https://minecraft.azureedge.net/bin-linux/bedrock-server-${VERSION}.zip --output bedrock-server.zip && unzip bedrock-server.zip -d bedrock-server && rm bedrock-server.zip \
     && mv -vn /bedrock-server/whitelist.json /bedrock-server/config/whitelist.json && mv -vn /bedrock-server/permissions.json /bedrock-server/config/permissions.json && mv -vn /bedrock-server/server.properties /bedrock-server/config/server.properties \
     && ln -s /bedrock-server/config/whitelist.json /bedrock-server/whitelist.json && ln -s /bedrock-server/config/permissions.json /bedrock-server/permissions.json && ln -s /bedrock-server/config/server.properties /bedrock-server/server.properties \
+    && chmod +x /bedrock-server/start-server.sh
     && chmod +x /bedrock-server/bedrock_server
 
 ### after setup
@@ -32,5 +35,5 @@ WORKDIR /bedrock-server
 
 ENV LD_LIBRARY_PATH=.
 
-CMD ["/bin/sh", "-c", "./bedrock_server"]
+CMD ["/bin/sh", "-c", "./start-server.sh]
 

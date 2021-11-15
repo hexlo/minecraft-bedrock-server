@@ -47,5 +47,5 @@ WORKDIR /bedrock-server
 
 ENV LD_LIBRARY_PATH=.
 
-CMD ["/bin/sh", "-c", "./start-server.sh]
+CMD ["/bin/sh", "-c", "./start-server.sh"]
 

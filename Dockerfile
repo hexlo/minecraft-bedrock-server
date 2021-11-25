@@ -10,6 +10,8 @@ ENV LD_LIBRARY_PATH=/bedrock-server/
 
 RUN apt update && apt install -y curl unzip nano
 
+COPY start-server.sh /bedrock-server/start-server.sh
+
 ### Install Script
 RUN mkdir -p /bedrock-server/config /bedrock-server/worlds /bedrock-server/info \
     && if [ "$VERSION" = "latest" ]; then \
@@ -40,8 +42,6 @@ RUN mkdir -p /bedrock-server/config /bedrock-server/worlds /bedrock-server/info 
 EXPOSE 19132/udp
 
 VOLUME ["/bedrock-server/worlds", "/bedrock-server/config", "/bedrock-server/info"]
-
-COPY start-server.sh /bedrock-server/start-server.sh
 
 WORKDIR /bedrock-server
 

@@ -4,9 +4,17 @@ ARG VER=latest
 
 ENV VERSION=$VER
 
+ENV LATEST_VERSION=""
+
 RUN apt update && apt install -y curl unzip nano
 
-ENV LATEST_VERSION=""
+EXPOSE 19132/udp
+
+VOLUME ["/bedrock-server/worlds", "/bedrock-server/config", "/bedrock-server/info"]
+
+WORKDIR /bedrock-server
+
+ENV LD_LIBRARY_PATH=.
 
 COPY start-server.sh /bedrock-server/start-server.sh
 
@@ -36,16 +44,6 @@ RUN mkdir -p /bedrock-server/config /bedrock-server/worlds /bedrock-server/info 
     
     && chmod +x /bedrock-server/start-server.sh \
     && chmod +x /bedrock-server/bedrock_server
-
-### after setup
-
-EXPOSE 19132/udp
-
-VOLUME ["/bedrock-server/worlds", "/bedrock-server/config", "/bedrock-server/info"]
-
-WORKDIR /bedrock-server
-
-ENV LD_LIBRARY_PATH=.
 
 CMD ["/bin/sh", "-c", "./start-server.sh"]
 

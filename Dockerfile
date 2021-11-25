@@ -16,8 +16,8 @@ RUN mkdir -p /bedrock-server/config /bedrock-server/worlds /bedrock-server/info 
         echo "using latest version." \
     &&  export LATEST_VERSION=$(curl -v -L --silent \
         -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36" \
-        https://www.minecraft.net/en-us/download/server/bedrock/ 2>&1 | grep -o 'https://minecraft.azureedge.net/bin-linux/[^"]*' \
-        | sed 's#.*/bedrock-server-##' | sed 's/.zip//') \
+        https://terraria.fandom.com/wiki/Server#Downloads 2>&1 | grep -o 'https://terraria.org/api/download/pc-dedicated-server/[^"]*' \
+        | sed 's#.*/terraria-server-##' | sed 's/.zip//' | tail -1) \
     &&  export VERSION=${LATEST_VERSION}; fi \
     && echo "VERSION=${VERSION}" \
     && echo "${VERSION}" > /bedrock-server/info/version.txt \

@@ -1,0 +1,10 @@
+# Git files
+.git
+.gitignore
+
+# Jenkins files
+Jenkinsfile
+
+# Build and misc. files
+download-latest-version.sh
+get-latest-version.sh

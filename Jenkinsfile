@@ -26,6 +26,7 @@ pipeline {
     stage('Getting Latest Version') {
       steps {
         script {
+          echo "pwd: $pwd"
           serverVersion = sh(script: 'get-latest-version.sh', , returnStdout: true).trim()
           echo "serverVersion=${serverVersion}"
         }

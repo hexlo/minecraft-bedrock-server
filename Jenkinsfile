@@ -35,12 +35,19 @@ pipeline {
       steps{
 
         script {
-//           dockerhubImage = docker.build dockerhubRegistry + ":$BUILD_NUMBER"
+          // Docker Hub
           dockerhubImageLatest = docker.build( "${dockerhubRegistry}:${tag}" )
+          dockerhubImageBuildNum = docker.build( "${dockerhubRegistry}:${BUILD_NUMBER}" )
           if (serverVersion) {
             dockerhubImageVerNum = docker.build( "${dockerhubRegistry}:${serverVersion}" )
           }
+          
+          // Github
           githubImage = docker.build( "${githubRegistry}:${tag}" )
+          githubImageBuildNum = docker.build( "${githubRegistry}:${BUILD_NUMBER}" )
+          if (serverVersion) {
+            githubImageVerNum = docker.build( "${githubRegistry}:${serverVersion}" )
+          }
         }
       }
     }
@@ -48,14 +55,18 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', "${dockerhubCredentials}" ) {
-//             dockerhubImage.push()
             dockerhubImageLatest.push()
+            dockerhubImageBuildNum.push()
             if (dockerhubImageVerNum) {
               dockerhubImageVerNum.push()
             }
           }
           docker.withRegistry("https://${githubRegistry}", "${githubCredentials}" ) {
             githubImage.push()
+            githubImageBuildNum.push()
+            if (dockerhubImageVerNum) {
+              githubImageVerNum.push()
+            }
           }
         }
       }
@@ -64,8 +75,11 @@ pipeline {
       steps{
 //         sh "docker rmi $dockerhubRegistry$imageName:$BUILD_NUMBER"
         sh "docker rmi ${dockerhubRegistry}:${tag}"
+        sh "docker rmi ${dockerhubRegistry}:${BUILD_NUMBER}"
         sh "docker rmi ${dockerhubRegistry}:${serverVersion}"
         sh "docker rmi ${githubRegistry}:${tag}"
+        sh "docker rmi ${githubRegistry}:${BUILD_NUMBER}"
+        sh "docker rmi ${githubRegistry}:${serverVersion}"
       }
     }
   }

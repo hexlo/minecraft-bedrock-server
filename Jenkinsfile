@@ -2,7 +2,7 @@ pipeline {
   environment {
     userName = "hexlo"
     imageName = "minecraft-bedrock-server"
-    tag = ":latest"
+    tag = "latest"
     gitRepo = "https://github.com/${userName}/${imageName}.git"
     dockerhubRegistry = "${userName}/${imageName}"
     githubRegistry = "ghcr.io/${userName}/${imageName}"
@@ -36,11 +36,11 @@ pipeline {
 
         script {
 //           dockerhubImage = docker.build dockerhubRegistry + ":$BUILD_NUMBER"
-          dockerhubImageLatest = docker.build( "${dockerhubRegistry}${tag}" )
+          dockerhubImageLatest = docker.build( "${dockerhubRegistry}:${tag}" )
           if (serverVersion) {
-            dockerhubImageVerNum = docker.build( "${dockerhubRegistry}${serverVersion}" )
+            dockerhubImageVerNum = docker.build( "${dockerhubRegistry}:${serverVersion}" )
           }
-          githubImage = docker.build( "${githubRegistry}${tag}" )
+          githubImage = docker.build( "${githubRegistry}:${tag}" )
         }
       }
     }
@@ -50,7 +50,7 @@ pipeline {
           docker.withRegistry( '', "${dockerhubCredentials}" ) {
 //             dockerhubImage.push()
             dockerhubImageLatest.push()
-            if (serverVersion) {
+            if (dockerhubImageVerNum) {
               dockerhubImageVerNum.push()
             }
           }
@@ -63,9 +63,9 @@ pipeline {
     stage('Remove Unused docker image') {
       steps{
 //         sh "docker rmi $dockerhubRegistry$imageName:$BUILD_NUMBER"
-        sh "docker rmi ${dockerhubRegistry}${tag}"
-        sh "docker rmi ${dockerhubRegistry}${serverVersion}"
-        sh "docker rmi ${githubRegistry}${tag}"
+        sh "docker rmi ${dockerhubRegistry}:${tag}"
+        sh "docker rmi ${dockerhubRegistry}:${serverVersion}"
+        sh "docker rmi ${githubRegistry}:${tag}"
       }
     }
   }

@@ -28,7 +28,7 @@ pipeline {
         script {
           echo "pwd: ${pwd}"
           echo "WORKSPACE=${WORKSPACE}"
-          echo "$(ls -al "${WORKSPACE}")"
+//           echo "$(ls -al "${WORKSPACE}")"
           serverVersion = sh(script: 'get-latest-version.sh', , returnStdout: true).trim()
           echo "serverVersion=${serverVersion}"
         }

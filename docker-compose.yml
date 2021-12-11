@@ -22,6 +22,8 @@ services:
       - type: volume
         source: minecraft-servers-info
         target: /bedrock-server/info
+    labels:
+      com.centurylinklabs.watchtower.enable: true
 
   minecraft-kingdom:
     image: ghcr.io/hexlo/minecraft-bedrock-server:latest
@@ -44,6 +46,8 @@ services:
       - type: volume
         source: minecraft-servers-info
         target: /bedrock-server/info
+    labels:
+      com.centurylinklabs.watchtower.enable: true
 
   minecraft-caves:
     image: ghcr.io/hexlo/minecraft-bedrock-server:latest
@@ -66,6 +70,8 @@ services:
       - type: volume
         source: minecraft-servers-info
         target: /bedrock-server/info
+    labels:
+      com.centurylinklabs.watchtower.enable: true
 
   minecraft-lush:
     image: ghcr.io/hexlo/minecraft-bedrock-server:latest
@@ -88,6 +94,32 @@ services:
       - type: volume
         source: minecraft-servers-info
         target: /bedrock-server/info
+    labels:
+      com.centurylinklabs.watchtower.enable: true
+
+  minecraft-cliffs:
+    image: ghcr.io/hexlo/minecraft-bedrock-server:latest
+    container_name: minecraft-cliffs
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    networks:
+      - traefik_net
+    restart: always
+    ports:
+      - 19135:19132/udp
+      - 19135:19132/tcp
+    volumes:
+      - type: bind
+        source: ./cliffs/config
+        target: /bedrock-server/config
+      - type: bind
+        source: ./cliffs/worlds
+        target: /bedrock-server/worlds
+      - type: volume
+        source: minecraft-servers-info
+        target: /bedrock-server/info
+    labels:
+      com.centurylinklabs.watchtower.enable: true
 
 networks:
   traefik_net:
@@ -96,4 +128,3 @@ networks:
 volumes:
   minecraft-servers-info:
     external: true
-#    name: minecraft-servers-info

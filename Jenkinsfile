@@ -54,6 +54,7 @@ pipeline {
     stage('Deploy Image') {
       steps{
         script {
+          // Docker Hub
           docker.withRegistry( '', "${dockerhubCredentials}" ) {
             dockerhubImageLatest.push()
             dockerhubImageBuildNum.push()
@@ -61,6 +62,7 @@ pipeline {
               dockerhubImageVerNum.push()
             }
           }
+          // Github
           docker.withRegistry("https://${githubRegistry}", "${githubCredentials}" ) {
             githubImage.push()
             githubImageBuildNum.push()
@@ -73,10 +75,12 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-//         sh "docker rmi $dockerhubRegistry$imageName:$BUILD_NUMBER"
+        // Docker Hub
         sh "docker rmi ${dockerhubRegistry}:${tag}"
         sh "docker rmi ${dockerhubRegistry}:${BUILD_NUMBER}"
         sh "docker rmi ${dockerhubRegistry}:${serverVersion}"
+        
+        // Github
         sh "docker rmi ${githubRegistry}:${tag}"
         sh "docker rmi ${githubRegistry}:${BUILD_NUMBER}"
         sh "docker rmi ${githubRegistry}:${serverVersion}"
@@ -90,7 +94,6 @@ pipeline {
         Status: <b>Failed</b> <br> \
         Build URL: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', \
         subject: "Jenkins Build Failed: ${env.JOB_NAME}", to: "jenkins@mindlab.dev";  
-
     }
   }
 }

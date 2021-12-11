@@ -25,12 +25,13 @@ pipeline {
     }
     stage('Getting Latest Version') {
       steps {
-        script {
-          echo "pwd: ${pwd}"
-          echo "WORKSPACE=${WORKSPACE}"
-//           echo "$(ls -al "${WORKSPACE}")"
-          serverVersion = sh(script: 'get-latest-version.sh', , returnStdout: true).trim()
-          echo "serverVersion=${serverVersion}"
+        dir("${WORKSPACE}") {
+          script {
+            echo "pwd: ${pwd}"
+            echo "WORKSPACE=${WORKSPACE}"
+            serverVersion = sh(script: 'get-latest-version.sh', , returnStdout: true).trim()
+            echo "serverVersion=${serverVersion}"
+          }
         }
       }
     }

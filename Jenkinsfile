@@ -43,7 +43,7 @@ pipeline {
 //           dockerhubImage = docker.build dockerhubRegistry + ":$BUILD_NUMBER"
           dockerhubImageLatest = docker.build( "${dockerhubRegistry}${tag}" )
           if (serverVersion) {
-            dockerhubImageVerNum = docker.build( "${dokcerhubRegistry}${serverVersion}" )
+            dockerhubImageVerNum = docker.build( "${dockerhubRegistry}${serverVersion}" )
           }
           githubImage = docker.build( "${githubRegistry}${tag}" )
         }

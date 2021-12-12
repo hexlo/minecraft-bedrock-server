@@ -19,6 +19,7 @@ version: '3'
 services:
 
   minecraft-server:
+    # Docker Hub mirror: hexlo/minecraft-bedrock-server:latest
     image: ghcr.io/iceoid/minecraft-bedrock-server:latest
     container_name: minecraft-server
     stdin_open: true # docker run -i

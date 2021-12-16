@@ -2,7 +2,8 @@ version: '3.2'
 services:
 
   minecraft-north:
-    image: ghcr.io/hexlo/minecraft-bedrock-server:latest
+    # Github mirror: ghcr.io/hexlo/minecraft-bedrock-server:latest
+    image: hexlo/minecraft-bedrock-server:latest
     container_name: minecraft-north
     stdin_open: true # docker run -i
     tty: true        # docker run -t
@@ -26,7 +27,8 @@ services:
       com.centurylinklabs.watchtower.enable: true
 
   minecraft-kingdom:
-    image: ghcr.io/hexlo/minecraft-bedrock-server:latest
+    # Github mirror: ghcr.io/hexlo/minecraft-bedrock-server:latest
+    image: hexlo/minecraft-bedrock-server:latest
     container_name: minecraft-kingdom
     stdin_open: true # docker run -i
     tty: true        # docker run -t
@@ -50,7 +52,8 @@ services:
       com.centurylinklabs.watchtower.enable: true
 
   minecraft-caves:
-    image: ghcr.io/hexlo/minecraft-bedrock-server:latest
+    # Github mirror: ghcr.io/hexlo/minecraft-bedrock-server:latest
+    image: hexlo/minecraft-bedrock-server:latest
     container_name: minecraft-caves
     stdin_open: true # docker run -i
     tty: true        # docker run -t
@@ -74,7 +77,8 @@ services:
       com.centurylinklabs.watchtower.enable: true
 
   minecraft-lush:
-    image: ghcr.io/hexlo/minecraft-bedrock-server:latest
+    # Github mirror: ghcr.io/hexlo/minecraft-bedrock-server:latest
+    image: hexlo/minecraft-bedrock-server:latest
     container_name: minecraft-lush
     stdin_open: true # docker run -i
     tty: true        # docker run -t
@@ -98,7 +102,8 @@ services:
       com.centurylinklabs.watchtower.enable: true
 
   minecraft-cliffs:
-    image: ghcr.io/hexlo/minecraft-bedrock-server:latest
+    # Github mirror: ghcr.io/hexlo/minecraft-bedrock-server:latest
+    image: hexlo/minecraft-bedrock-server:latest
     container_name: minecraft-cliffs
     stdin_open: true # docker run -i
     tty: true        # docker run -t

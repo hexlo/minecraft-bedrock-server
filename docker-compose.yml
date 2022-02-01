@@ -48,6 +48,9 @@ services:
       - type: volume
         source: minecraft-servers-info
         target: /bedrock-server/info
+      - type: bind
+        source: ./kingdom/resource_packs
+        target: /bedrock-server/resource_packs
     labels:
       com.centurylinklabs.watchtower.enable: true
 

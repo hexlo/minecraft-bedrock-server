@@ -13,7 +13,7 @@ RUN apt update && apt install -y curl unzip nano
 COPY start-server.sh /bedrock-server/start-server.sh
 
 ### Install Script
-RUN mkdir -p /bedrock-server/config /bedrock-server/worlds /bedrock-server/info \
+RUN mkdir -p /bedrock-server/config /bedrock-server/worlds /bedrock-server/info /bedrock-server/resource_packs \
     && if [ "$VERSION" = "latest" ]; then \
         echo "using latest version." \
     &&  export LATEST_VERSION=$(curl -v -L --silent \
@@ -41,7 +41,7 @@ RUN mkdir -p /bedrock-server/config /bedrock-server/worlds /bedrock-server/info 
 
 EXPOSE 19132/udp
 
-VOLUME ["/bedrock-server/worlds", "/bedrock-server/config", "/bedrock-server/info"]
+VOLUME ["/bedrock-server/worlds", "/bedrock-server/config", "/bedrock-server/info", "/bedrock-server/resource_packs"]
 
 WORKDIR /bedrock-server
 

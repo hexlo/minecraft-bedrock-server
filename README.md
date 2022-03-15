@@ -41,7 +41,7 @@ This server would run on port 20000.
 
 In your config folder, have the following 3 files _(don't include them if you would like new default ones)_:
 - *server.properties* _(edit as you wish)_
-- *whitelist.json* _(if whitelist=on is set in the server.properties, you need to add players in this file as follow. The xuid will be generated automatically)_
+- *allowlist.json* _(if whitelist=true is set in the server.properties, you need to add players in this file as follow. The xuid will be generated automatically)_
 ```
 [
      {
@@ -55,7 +55,7 @@ In your config folder, have the following 3 files _(don't include them if you wo
      }
 ]
 ```
-- *permissions.json* _(give players permissions. You need the xuid of the players. Either look a the whitelist.json file after adding players or use an online xuid grabber)_
+- *permissions.json* _(give players permissions. You need the xuid of the players. Either look a the allowlist.json file after adding players or use an online xuid grabber)_
 ```
 [
      {

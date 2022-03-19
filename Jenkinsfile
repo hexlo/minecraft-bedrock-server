@@ -38,7 +38,7 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          def date = sh "date +%Y-%m-%d:%H:%M:%S"
+          def date = sh "echo $(date +%Y-%m-%d:%H:%M:%S)"
           // Docker Hub
           def dockerhubImage = docker.build( "${dockerhubRegistry}:${tag}", "--no-cache --build-arg CACHE_DATE=${date} .")
           
@@ -65,9 +65,10 @@ pipeline {
         }
       }
     }
-    stage('Remove Unused docker image') {
+    stage('Remove Unused docker images') {
       steps{
-        sh "docker system prune -f"
+        echo "skipping pruning..."
+        // sh "docker system prune -f"
       }
     }
   }

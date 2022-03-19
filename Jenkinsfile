@@ -2,9 +2,7 @@ pipeline {
   environment {
     userName = "hexlo"
     imageName = "minecraft-bedrock-server"
-    // Set buildVersion to manually change the server version. Leave empty for defaulting to 'latest'
-    buildVersion = 'latest'
-    tag = buildVersion ? buildVersion : 'latest'
+    tag = 'latest'
     gitRepo = "https://github.com/${userName}/${imageName}.git"
     dockerhubRegistry = "${userName}/${imageName}"
     githubRegistry = "ghcr.io/${userName}/${imageName}"
@@ -28,7 +26,7 @@ pipeline {
             serverVersion = sh(script: "${WORKSPACE}/get-latest-version.sh", , returnStdout: true).trim()
           }
           else {
-            serverVersion = buildVersion
+            serverVersion = tag
           }
           echo "serverVersion=${serverVersion}"
         }
@@ -39,10 +37,10 @@ pipeline {
         script {
           def date = sh "date +%Y-%m-%d:%H:%M:%S"
           // Docker Hub
-          def dockerhubImage = docker.build( "${dockerhubRegistry}:${tag}", "--no-cache --build-arg VERSION=${buildVersion} --build-arg CACHE_DATE=$date .")
+          def dockerhubImage = docker.build( "${dockerhubRegistry}:${tag}", "--no-cache --build-arg CACHE_DATE=${date} .")
           
           // Github
-          def githubImage = docker.build( "${githubRegistry}:${tag}", "--no-cache --build-arg VERSION=${buildVersion} --build-arg CACHE_DATE=$date .")
+          def githubImage = docker.build( "${githubRegistry}:${tag}", "--no-cache --build-arg CACHE_DATE=${date} .")
         }
       }
     }

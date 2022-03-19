@@ -4,7 +4,7 @@ pipeline {
     imageName = "minecraft-bedrock-server"
     // Set buildVersion to manually change the server version. Leave empty for defaulting to 'latest'
     buildVersion = ''
-    tag = ${buildVersion ? buildVersion : 'latest'}
+    tag = "${buildVersion ? buildVersion : 'latest'}"
     gitRepo = "https://github.com/${userName}/${imageName}.git"
     dockerhubRegistry = "${userName}/${imageName}"
     githubRegistry = "ghcr.io/${userName}/${imageName}"

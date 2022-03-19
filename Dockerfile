@@ -10,6 +10,8 @@ ENV LD_LIBRARY_PATH=/bedrock-server/
 
 RUN apt update && apt install -y curl unzip nano
 
+ARG CACHE_DATE=empty
+
 COPY start-server.sh /bedrock-server/start-server.sh
 
 ### Install Script

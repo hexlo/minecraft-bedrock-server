@@ -10,6 +10,9 @@ pipeline {
     dockerhubCredentials = 'DOCKERHUB_TOKEN'
     githubCredentials = 'GITHUB_TOKEN'
     
+    dockerhubImage = ''
+    githubImage = ''
+    
     serverVersion = ''
   }
   agent any

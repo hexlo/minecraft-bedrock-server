@@ -1,37 +1,96 @@
-## Welcome to GitHub Pages
+```                
+ __  __     ______     __  __     __         ______    
+/\ \_\ \   /\  ___\   /\_\_\_\   /\ \       /\  __ \   
+\ \  __ \  \ \  __\   \/_/\_\/_  \ \ \____  \ \ \/\ \  
+ \ \_\ \_\  \ \_____\   /\_\/\_\  \ \_____\  \ \_____\ 
+  \/_/\/_/   \/_____/   \/_/\/_/   \/_____/   \/_____/ 
+                                                       
+                   
+```
+# Minecraft Bedrock Server
+Docker Hub mirror: https://hub.docker.com/r/hexlo/minecraft-bedrock-server
 
-You can use the [editor on GitHub](https://github.com/hexlo/minecraft-bedrock-server/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## Initial Setup
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+You can easily import your world and config files. Here is an example docker-compose.yml:
+Change the path of the volumes approprietly.
+```
+version: '3'
+services:
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+  minecraft-server:
+    # Docker Hub mirror: hexlo/minecraft-bedrock-server:latest
+    image: ghcr.io/iceoid/minecraft-bedrock-server:latest
+    container_name: minecraft-server
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    restart: unless-stopped
+    ports:
+      - 19132:19132/udp
+    volumes:
+      - ./path_to/config:/bedrock-server/config
+      - ./path_to/worlds:/bedrock-server/worlds
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+If you want multiple servers running concurrently, you can have different ports for each one, and port forward accordingly. ie.:
+```
+    ports:
+      - 20000:19132/udp
+```
+This server would run on port 20000.
 
-### Jekyll Themes
+In your config folder, have the following 3 files _(don't include them if you would like new default ones)_:
+- *server.properties* _(edit as you wish)_
+- *allowlist.json* _(if whitelist=true is set in the server.properties, you need to add players in this file as follow. The xuid will be generated automatically)_
+```
+[
+     {
+         "ignoresPlayerLimit": false,
+         "name": "Player1"
+     },
+     {
+         "ignoresPlayerLimit": false,
+         "name": "Player2",
+         "xuid": "12346764585"
+     }
+]
+```
+- *permissions.json* _(give players permissions. You need the xuid of the players. Either look a the allowlist.json file after adding players or use an online xuid grabber)_
+```
+[
+     {
+         "permission": "operator",
+         "xuid": "12346764585"
+     }
+]
+```
+The structure of the worlds folder is as follow:
+```
+bedrock-server
+|__worlds
+     |__level
+          |__db
+             level.dat
+             level.dat_old
+             levelname.txt
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/hexlo/minecraft-bedrock-server/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+## Usage
 
-### Support or Contact
+### Start the server
+The server will start with the container
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+### Stop the server without stopping the container
+`docker attach minecraft-server`\
+`stop`
+
+### You can use server side commands. 
+
+First, attach to the container with
+`docker attach minecraft-server`
+
+Here is a list of [useful commands](https://minecraftbedrock-archive.fandom.com/wiki/Commands/List_of_Commands)
+Don't include the forward slash before the commands ie: instead of `/say Hello!` use `say Hello!`
+
+To dettach without stopping the container
+`Ctrl+p + Ctrl+q`

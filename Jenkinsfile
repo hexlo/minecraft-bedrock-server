@@ -52,15 +52,15 @@ pipeline {
         script {
           // Docker Hub
           docker.withRegistry( '', "${dockerhubCredentials}" ) {
-            dockerhubImage.push("${tag}")
-            dockerhubImage.push("${BUILD_NUMBER}")
+            dockerhubImage.push("${tag}") 
             dockerhubImage.push("${serverVersion}")
+            // dockerhubImage.push("${BUILD_NUMBER}")
           }
           // Github
           docker.withRegistry("https://${githubRegistry}", "${githubCredentials}" ) {
             githubImage.push("${tag}")
-            githubImage.push("${BUILD_NUMBER}")
             githubImage.push("${serverVersion}")
+            // githubImage.push("${BUILD_NUMBER}")
           }
         }
       }

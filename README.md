@@ -8,7 +8,7 @@
                    
 ```
 # Minecraft Bedrock Server
-Docker Hub mirror: https://hub.docker.com/r/hexlo/minecraft-bedrock-server
+Docker Hub mirror: [https://hub.docker.com/r/hexlo/minecraft-bedrock-server](https://hub.docker.com/r/hexlo/minecraft-bedrock-server)
 
 ## Initial Setup
 

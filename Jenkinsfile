@@ -38,12 +38,12 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          def date = sh 'echo $(date +%Y-%m-%d:%H:%M:%S)'
+          date = sh "echo \$(date +%Y-%m-%d:%H:%M:%S)"
           // Docker Hub
-          def dockerhubImage = docker.build( "${dockerhubRegistry}:${tag}", "--no-cache --build-arg CACHE_DATE=${date} .")
+          dockerhubImage = docker.build( "${dockerhubRegistry}:${tag}", "--no-cache --build-arg CACHE_DATE=${date} .")
           
           // Github
-          def githubImage = docker.build( "${githubRegistry}:${tag}", "--no-cache --build-arg CACHE_DATE=${date} .")
+          githubImage = docker.build( "${githubRegistry}:${tag}", "--no-cache --build-arg CACHE_DATE=${date} .")
         }
       }
     }
@@ -67,8 +67,7 @@ pipeline {
     }
     stage('Remove Unused docker images') {
       steps{
-        echo "skipping pruning..."
-        // sh "docker system prune -f"
+        sh "docker system prune -f"
       }
     }
   }

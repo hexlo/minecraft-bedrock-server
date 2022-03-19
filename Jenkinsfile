@@ -2,7 +2,9 @@ pipeline {
   environment {
     userName = "hexlo"
     imageName = "minecraft-bedrock-server"
-    tag = "latest"
+    // Set buildVersion to manually change the server version. Leave empty for defaulting to 'latest'
+    buildVersion = ''
+    tag = buildVersion ? buildVersion : 'latest'
     gitRepo = "https://github.com/${userName}/${imageName}.git"
     dockerhubRegistry = "${userName}/${imageName}"
     githubRegistry = "ghcr.io/${userName}/${imageName}"
@@ -22,20 +24,25 @@ pipeline {
     stage('Getting Latest Version') {
       steps {
         script {
-          serverVersion = sh(script: "${WORKSPACE}/get-latest-version.sh", , returnStdout: true).trim()
+          if (tag == 'latest') {
+            serverVersion = sh(script: "${WORKSPACE}/get-latest-version.sh", , returnStdout: true).trim()
+          }
+          else {
+            serverVersion = buildVersion
+          }
           echo "serverVersion=${serverVersion}"
         }
       }
     }
     stage('Building image') {
       steps{
-
         script {
+          def date = sh(echo $(date +%Y-%m-%d:%H:%M:%S))
           // Docker Hub
-          def dockerhubImage = docker.build( "${dockerhubRegistry}:${tag}" )
+          def dockerhubImage = docker.build( "${dockerhubRegistry}:${tag}", "--no-cache --build-arg VERSION=${buildVersion} --build-arg CACHE_DATE=$date .")
           
           // Github
-          def githubImage = docker.build( "${githubRegistry}:${tag}" )
+          def githubImage = docker.build( "${githubRegistry}:${tag}", "--no-cache --build-arg VERSION=${buildVersion} --build-arg CACHE_DATE=$date .")
         }
       }
     }
@@ -59,15 +66,7 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-        // Docker Hub
-        sh "docker rmi ${dockerhubRegistry}:${tag}"
-        sh "docker rmi ${dockerhubRegistry}:${BUILD_NUMBER}"
-        sh "docker rmi ${dockerhubRegistry}:${serverVersion}"
-        
-        // Github
-        sh "docker rmi ${githubRegistry}:${tag}"
-        sh "docker rmi ${githubRegistry}:${BUILD_NUMBER}"
-        sh "docker rmi ${githubRegistry}:${serverVersion}"
+        sh "docker system prune -f"
       }
     }
   }

@@ -10,10 +10,6 @@ pipeline {
     dockerhubCredentials = 'DOCKERHUB_TOKEN'
     githubCredentials = 'GITHUB_TOKEN'
     
-    dockerhubImage = ''
-    dockerhubImageLatest = ''
-    githubImage = ''
-    
     serverVersion = ''
   }
   agent any
@@ -36,18 +32,10 @@ pipeline {
 
         script {
           // Docker Hub
-          dockerhubImageLatest = docker.build( "${dockerhubRegistry}:${tag}" )
-          dockerhubImageBuildNum = docker.build( "${dockerhubRegistry}:${BUILD_NUMBER}" )
-          if (serverVersion) {
-            dockerhubImageVerNum = docker.build( "${dockerhubRegistry}:${serverVersion}" )
-          }
+          def dockerhubImage = docker.build( "${dockerhubRegistry}:${tag}" )
           
           // Github
-          githubImage = docker.build( "${githubRegistry}:${tag}" )
-          githubImageBuildNum = docker.build( "${githubRegistry}:${BUILD_NUMBER}" )
-          if (serverVersion) {
-            githubImageVerNum = docker.build( "${githubRegistry}:${serverVersion}" )
-          }
+          def githubImage = docker.build( "${githubRegistry}:${tag}" )
         }
       }
     }
@@ -56,19 +44,15 @@ pipeline {
         script {
           // Docker Hub
           docker.withRegistry( '', "${dockerhubCredentials}" ) {
-            dockerhubImageLatest.push()
-            dockerhubImageBuildNum.push()
-            if (dockerhubImageVerNum) {
-              dockerhubImageVerNum.push()
-            }
+            dockerhubImage.push("${tag}")
+            dockerhubImage.push("${BUILD_NUMBER}")
+            dockerhubImage.push("${serverVersion}")
           }
           // Github
           docker.withRegistry("https://${githubRegistry}", "${githubCredentials}" ) {
-            githubImage.push()
-            githubImageBuildNum.push()
-            if (dockerhubImageVerNum) {
-              githubImageVerNum.push()
-            }
+            githubImage.push("${tag}")
+            githubImage.push("${BUILD_NUMBER}")
+            githubImage.push("${serverVersion}")
           }
         }
       }

@@ -26,7 +26,7 @@ pipeline {
       steps {
         script {
           if (tag == 'latest') {
-            serverVersion = sh(script: "${WORKSPACE}/get-latest-version.sh", , returnStdout: true).trim()
+            serverVersion = sh(script: "${WORKSPACE}/.scripts/get-latest-version.sh", , returnStdout: true).trim()
           }
           else {
             serverVersion = tag
@@ -38,12 +38,11 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          date = sh "echo \$(date +%Y-%m-%d:%H:%M:%S)"
           // Docker Hub
-          dockerhubImage = docker.build( "${dockerhubRegistry}:${tag}", "--no-cache --build-arg CACHE_DATE=${date} .")
+          dockerhubImage = docker.build( "${dockerhubRegistry}:${tag}", "--no-cache .")
           
           // Github
-          githubImage = docker.build( "${githubRegistry}:${tag}", "--no-cache --build-arg CACHE_DATE=${date} .")
+          githubImage = docker.build( "${githubRegistry}:${tag}", "--no-cache .")
         }
       }
     }
@@ -54,13 +53,11 @@ pipeline {
           docker.withRegistry( '', "${dockerhubCredentials}" ) {
             dockerhubImage.push("${tag}") 
             dockerhubImage.push("${serverVersion}")
-            // dockerhubImage.push("${BUILD_NUMBER}")
           }
           // Github
           docker.withRegistry("https://${githubRegistry}", "${githubCredentials}" ) {
             githubImage.push("${tag}")
             githubImage.push("${serverVersion}")
-            // githubImage.push("${BUILD_NUMBER}")
           }
         }
       }

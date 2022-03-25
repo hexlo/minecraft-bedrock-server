@@ -1,0 +1,12 @@
+[
+    {
+        "ignoresPlayerLimit": true,
+        "name": "Player1",
+        "xuid": "1234567890"
+    },
+    {
+        "ignoresPlayerLimit": true,
+        "name": "Player2",
+        "xuid": "2345678901"
+    }
+]

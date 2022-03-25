@@ -1,6 +1,19 @@
 !Dockerfile
-!docker-compose.yml
 !README.md
+
+docker-compose.yml
+
+bedrock-server
+test
+
+**/allowlist.json
+!My-World-Example/config/allowlist.json
+
+**/permissions.json
+!My-World-Example/config/permissions.json
+
+**/server.properties
+!My-World-Example/config/server.properties
 
 north/
 kingdom/

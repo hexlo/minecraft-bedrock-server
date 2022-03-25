@@ -6,46 +6,49 @@ ENV VERSION=$VER
 
 ENV LATEST_VERSION=""
 
-ENV LD_LIBRARY_PATH=/bedrock-server/
+ENV SERVER_DIR=/bedrock-server
+
+ENV LD_LIBRARY_PATH=${SERVER_DIR}
+
+ENV VERSION_FILE=${SERVER_DIR}/local-version.txt
 
 RUN apt update && apt install -y curl unzip nano
 
-ARG CACHE_DATE=empty
+WORKDIR ${SERVER_DIR}
 
-COPY start-server.sh /bedrock-server/start-server.sh
+RUN mkdir -p ${SERVER_DIR}/defaults ${SERVER_DIR}/config ${SERVER_DIR}/worlds ${SERVER_DIR}/info ${SERVER_DIR}/resource_packs /scripts
+
+COPY ./.scripts/* /scripts/
+
+RUN chmod +x /scripts/* \
+    && mv /scripts/start-server.sh ${SERVER_DIR}/start-server.sh
 
 ### Install Script
-RUN mkdir -p /bedrock-server/config /bedrock-server/worlds /bedrock-server/info /bedrock-server/resource_packs \
-    && if [ "$VERSION" = "latest" ]; then \
+RUN if [ "${VERSION}" = "latest" ]; then \
         echo "using latest version." \
-    &&  export LATEST_VERSION=$(curl -v -L --silent \
-        -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36" \
-        https://www.minecraft.net/en-us/download/server/bedrock/ 2>&1 | grep -o 'https://minecraft.azureedge.net/bin-linux/[^"]*' \
-        | sed 's#.*/bedrock-server-##' | sed 's/.zip//') \
+    &&  export LATEST_VERSION=$(/scripts/download-latest-version.sh ${SERVER_DIR}) \
     &&  export VERSION=${LATEST_VERSION}; fi \
     && echo "VERSION=${VERSION}" \
-    && echo "${VERSION}" > /bedrock-server/info/version.txt \
-    && touch /bedrock-server/local-version.txt && echo "${VERSION}" > /bedrock-server/local-version.txt \
-    
-    && curl https://minecraft.azureedge.net/bin-linux/bedrock-server-${VERSION}.zip --output bedrock-server.zip \
-    && unzip bedrock-server.zip -d bedrock-server && rm bedrock-server.zip \
-    
-    && mv -vn /bedrock-server/allowlist.json /bedrock-server/config/allowlist.json \
-    && mv -vn /bedrock-server/permissions.json /bedrock-server/config/permissions.json \
-    && mv -vn /bedrock-server/server.properties /bedrock-server/config/server.properties \
-    
-    && ln -s /bedrock-server/config/allowlist.json /bedrock-server/allowlist.json \
-    && ln -s /bedrock-server/config/permissions.json /bedrock-server/permissions.json \
-    && ln -s /bedrock-server/config/server.properties /bedrock-server/server.properties \
-    
-    && chmod +x /bedrock-server/start-server.sh \
-    && chmod +x /bedrock-server/bedrock_server
+    && echo "${VERSION}" > ${VERSION_FILE} \
+    #
+    && cp -a ${SERVER_DIR}/allowlist.json ${SERVER_DIR}/defaults/allowlist.json \
+    && cp -a ${SERVER_DIR}/permissions.json ${SERVER_DIR}/defaults/permissions.json \
+    && cp -a ${SERVER_DIR}/server.properties ${SERVER_DIR}/defaults/server.properties \
+    #
+    && mv -vn ${SERVER_DIR}/allowlist.json ${SERVER_DIR}/config/allowlist.json \
+    && mv -vn ${SERVER_DIR}/permissions.json ${SERVER_DIR}/config/permissions.json \
+    && mv -vn ${SERVER_DIR}/server.properties ${SERVER_DIR}/config/server.properties \
+    #
+    && ln -s ${SERVER_DIR}/config/allowlist.json ${SERVER_DIR}/allowlist.json \
+    && ln -s ${SERVER_DIR}/config/permissions.json ${SERVER_DIR}/permissions.json \
+    && ln -s ${SERVER_DIR}/config/server.properties ${SERVER_DIR}/server.properties \
+    && chmod +x ${SERVER_DIR}/bedrock_server
 
 EXPOSE 19132/udp
 
-VOLUME ["/bedrock-server/worlds", "/bedrock-server/config", "/bedrock-server/info", "/bedrock-server/resource_packs"]
+VOLUME ["${SERVER_DIR}/worlds", "${SERVER_DIR}/config", "${SERVER_DIR}/info", "${SERVER_DIR}/resource_packs"]
 
-WORKDIR /bedrock-server
+WORKDIR ${SERVER_DIR}
 
 CMD ["/bin/sh", "-c", "./start-server.sh"]
 

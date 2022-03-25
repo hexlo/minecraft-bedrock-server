@@ -1,0 +1,17 @@
+version: '3.2'
+services:
+  minecraft-server:
+    image: hexlo/minecraft-bedrock-server:latest
+    container_name: minecraft-server
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    restart: unless-stopped
+    ports:
+      - 19139:19132/udp
+    volumes:
+      - type: bind
+        source: ./My-World-Example/config
+        target: /bedrock-server/config
+      - type: bind
+        source: ./My-World-Example/worlds
+        target: /bedrock-server/worlds

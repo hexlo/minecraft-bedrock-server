@@ -74,7 +74,7 @@ pipeline {
         Build Number: ${env.BUILD_NUMBER} <br> \
         Status: <b>Failed</b> <br> \
         Build URL: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', \
-        subject: "Jenkins Build Failed: ${env.JOB_NAME}", to: "jenkins@mindlab.dev";  
+        subject: "Jenkins Build Failed: ${env.JOB_NAME}", to: "jenkins@runx.io";  
     }
   }
 }

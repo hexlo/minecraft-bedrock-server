@@ -74,8 +74,8 @@ pipeline {
         mail bcc: '', body: "<b>Jenkins Build Report</b><br><br> Project: ${env.JOB_NAME} <br> \
         Build Number: ${env.BUILD_NUMBER} <br> \
         Status: <b>Failed</b> <br> \
-        Build URL: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', \
-        subject: "Jenkins Build Failed: ${env.JOB_NAME}", to: $jenkins_email;  
+        Build URL: ${env.BUILD_URL}, cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', \
+        subject: "Jenkins Build Failed: ${env.JOB_NAME}", to: ${jenkins_email};  
     }
   }
 }

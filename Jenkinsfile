@@ -2,13 +2,14 @@ pipeline {
   environment {
     userName = "hexlo"
     imageName = "minecraft-bedrock-server"
-    tag = 'latest'
+    tag = "latest"
     gitRepo = "https://github.com/${userName}/${imageName}.git"
     dockerhubRegistry = "${userName}/${imageName}"
     githubRegistry = "ghcr.io/${userName}/${imageName}"
     
     dockerhubCredentials = 'DOCKERHUB_TOKEN'
     githubCredentials = 'GITHUB_TOKEN'
+    jenkins_email = credentials('RUNX_EMAIL')
     
     dockerhubImage = ''
     githubImage = ''
@@ -69,12 +70,12 @@ pipeline {
     }
   }
   post {
-    failure {
+    always {
         mail bcc: '', body: "<b>Jenkins Build Report</b><br><br> Project: ${env.JOB_NAME} <br> \
         Build Number: ${env.BUILD_NUMBER} <br> \
         Status: <b>Failed</b> <br> \
         Build URL: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', \
-        subject: "Jenkins Build Failed: ${env.JOB_NAME}", to: "jenkins@runx.io";  
+        subject: "Jenkins Build Failed: ${env.JOB_NAME}", to: '$jenkins_email';  
     }
   }
 }

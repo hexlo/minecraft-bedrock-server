@@ -70,7 +70,7 @@ pipeline {
     }
   }
   post {
-    always {
+    failure {
         mail bcc: '', \
         body: "<b>Jenkins Build Report</b><br><br> Project: ${env.JOB_NAME} <br> \
         Build Number: ${env.BUILD_NUMBER} <br> \

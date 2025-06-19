@@ -22,7 +22,7 @@ curl -L --silent -H "User-Agent: Mozilla/5.0" "$URL" --output "${dest}/bedrock-s
 if [ $? -eq 0 ]; then
   unzip -qq -o "${dest}/bedrock-server.zip" -d "${dest}" && \
   rm "${dest}/bedrock-server.zip"
-  echo "$version"
+  echo "Downloaded version $version to ${dest}"
 else
   echo "Failed to download or extract server version $version"
   exit 1

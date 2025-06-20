@@ -16,7 +16,7 @@ RUN apt update && apt install -y curl unzip nano
 
 WORKDIR ${SERVER_DIR}
 
-RUN mkdir -p ${SERVER_DIR}/defaults ${SERVER_DIR}/config ${SERVER_DIR}/worlds ${SERVER_DIR}/info ${SERVER_DIR}/resource_packs /scripts
+RUN mkdir -p ${SERVER_DIR}/defaults ${SERVER_DIR}/config ${SERVER_DIR}/worlds ${SERVER_DIR}/info ${SERVER_DIR}/resource_packs ${SERVER_DIR}/worlds_backup /scripts
 
 COPY ./.scripts/* /scripts/
 
@@ -40,14 +40,14 @@ RUN \
   fi \
   && if [ ""$(printf '%s\n' "$VERSION" "$CURRENT_VERSION" | sort -V | tail -n1)"" != "$CURRENT_VERSION" ]; then \
     echo "A newer version ($VERSION) is available."; \
-    echo "$VERSION" > "$VERSION_FILE"; \
     echo "Start downloading version: $VERSION"; \
     sh /scripts/download-latest-version.sh "$SERVER_DIR" "$VERSION"; \
+    echo "$VERSION" > "$VERSION_FILE"; \
    elif [  "$VERSION" != "$CURRENT_VERSION" ]; then \
     echo "A different version ($VERSION) is specified, but it is not the latest."; \
-    echo "$VERSION" > "$VERSION_FILE"; \
     echo "Start downloading version: $VERSION"; \
     sh /scripts/download-latest-version.sh "$SERVER_DIR" "$VERSION"; \
+    echo "$VERSION" > "$VERSION_FILE"; \
    else \
     echo "Already up to date ($CURRENT_VERSION)."; \
   fi
@@ -70,7 +70,7 @@ RUN ln -s ${SERVER_DIR}/config/allowlist.json ${SERVER_DIR}/allowlist.json \
 
 EXPOSE 19132/udp
 
-VOLUME ["${SERVER_DIR}/worlds", "${SERVER_DIR}/config", "${SERVER_DIR}/info", "${SERVER_DIR}/resource_packs"]
+VOLUME ["${SERVER_DIR}/worlds", "${SERVER_DIR}/config", "${SERVER_DIR}/info", "${SERVER_DIR}/resource_packs", "${SERVER_DIR}/worlds_backup"]
 
 WORKDIR ${SERVER_DIR}
 

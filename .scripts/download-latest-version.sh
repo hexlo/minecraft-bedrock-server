@@ -20,6 +20,7 @@ URL="https://www.minecraft.net/bedrockdedicatedserver/bin-linux/bedrock-server-$
 curl -L --silent -H "User-Agent: Mozilla/5.0" "$URL" --output "${dest}/bedrock-server.zip"
 
 if [ $? -eq 0 ]; then
+  echo "Downloaded version, starting extraction..."
   unzip -qq -o "${dest}/bedrock-server.zip" -d "${dest}" && \
   rm "${dest}/bedrock-server.zip"
   echo "Downloaded version $version to ${dest}"

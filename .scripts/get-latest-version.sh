@@ -1,2 +1,2 @@
 #!/bin/sh
-echo "1.21.92.1"
+curl -s https://raw.githubusercontent.com/robertraaijmakers/minecraft-version/refs/heads/main/bedrock_server_version_release.txt

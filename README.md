@@ -56,7 +56,7 @@ In your config folder, have the following 3 files _(don't include them if you wo
      }
 ]
 ```
-- *permissions.json* _(give players permissions. You need the xuid of the players. Either look a the allowlist.json file after adding players or use an online xuid grabber)_
+- *permissions.json* _(give players permissions. You need the xuid of the players. Either look at the allowlist.json file after adding players or use an online [xuid grabber](https://www.cxkes.me/xbox/xuid))_
 ```
 [
      {

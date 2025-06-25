@@ -17,7 +17,6 @@ Docker Hub mirror: [https://hub.docker.com/r/hexlo/minecraft-bedrock-server](htt
 You can easily import your world and config files. Here is an example docker-compose.yml:
 Change the path of the volumes approprietly.
 ```
-version: '3'
 services:
 
   minecraft-server:

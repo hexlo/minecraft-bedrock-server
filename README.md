@@ -20,8 +20,8 @@ Change the path of the volumes approprietly.
 services:
 
   minecraft-server:
-    # Docker Hub mirror: hexlo/minecraft-bedrock-server:latest
-    image: ghcr.io/iceoid/minecraft-bedrock-server:latest
+    # Github ghcr mirror: ghcr.io/iceoid/minecraft-bedrock-server:latest
+    image: hexlo/minecraft-bedrock-server:latest
     container_name: minecraft-server
     stdin_open: true # docker run -i
     tty: true        # docker run -t

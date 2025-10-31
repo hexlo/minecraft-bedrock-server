@@ -18,4 +18,4 @@ curl -L --silent -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple
     && unzip -qq -o ${dest}/bedrock-server.zip -d ${dest} \
     && rm ${dest}/bedrock-server.zip
 
-echo "Downloaded Minecraft Server version: ${LATEST_VERSION}"
+echo ${LATEST_VERSION}

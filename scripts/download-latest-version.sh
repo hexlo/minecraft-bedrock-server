@@ -8,7 +8,7 @@ SCRAPE_URL=https://minecraft.wiki/w/Bedrock_Dedicated_Server
 # Second Argument is a fixed version to download (optional). If omitted, it'll scrape the webpage to find the latest version.
 if [[ -z ${2} ]]
 then
-    LATEST_VERSION=$(./.scripts/get-latest-version.sh)
+    LATEST_VERSION=$(./scripts/get-latest-version.sh)
 else
     LATEST_VERSION=${2}
 fi;

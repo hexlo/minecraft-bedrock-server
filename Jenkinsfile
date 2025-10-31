@@ -27,7 +27,7 @@ pipeline {
       steps {
         script {
           if (tag == 'latest') {
-            serverVersion = sh(script: "${WORKSPACE}/.scripts/get-latest-version.sh", , returnStdout: true).trim()
+            serverVersion = sh(script: "${WORKSPACE}/scripts/get-latest-version.sh", , returnStdout: true).trim()
           }
           else {
             serverVersion = tag

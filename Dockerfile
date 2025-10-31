@@ -17,7 +17,7 @@ WORKDIR ${SERVER_DIR}
 # RUN mkdir -p ${SERVER_DIR}/{defaults,config,worlds,info,resource_packs,scripts}
 RUN mkdir -p ${SERVER_DIR}/defaults ${SERVER_DIR}/config ${SERVER_DIR}/worlds ${SERVER_DIR}/info ${SERVER_DIR}/resource_packs ${SERVER_DIR}/scripts
 
-COPY ./.scripts/* ${SERVER_DIR}/scripts/
+COPY ./scripts/* ${SERVER_DIR}/scripts/
 
 RUN chmod +x ${SERVER_DIR}/scripts/* \
     && mv ${SERVER_DIR}/scripts/start-server.sh ${SERVER_DIR}/start-server.sh

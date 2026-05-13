@@ -34,12 +34,12 @@ pipeline {
       steps {
         script {
           if (tag == 'latest') {
-            serverVersion = sh(script: "python3 ${WORKSPACE}/scripts/download_latest_version.py --get-version-only", returnStdout: true).trim()
+            env.serverVersion = sh(script: "python3 ${WORKSPACE}/scripts/download_latest_version.py --get-version-only", returnStdout: true).trim()
           }
           else {
-            serverVersion = tag
+            env.serverVersion = tag
           }
-          echo "serverVersion=${serverVersion}"
+          echo "serverVersion=${env.serverVersion}"
         }
       }
     }

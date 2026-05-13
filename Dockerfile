@@ -10,7 +10,7 @@ ENV LD_LIBRARY_PATH=${SERVER_DIR}
 
 ENV VERSION_FILE=${SERVER_DIR}/local-version.txt
 
-RUN apt update && apt install -y curl unzip nano wget
+RUN apt update && apt install -y curl unzip nano wget python3 python3-venv
 
 WORKDIR ${SERVER_DIR}
 
@@ -24,9 +24,11 @@ RUN chmod +x ${SERVER_DIR}/scripts/* \
 
 ### Install Script
 
-RUN export DOWNLOADED_VERSION=$(${SERVER_DIR}/scripts/download-latest-version.sh ${SERVER_DIR} ${VERSION}); \
-    echo "VERSION=${DOWNLOADED_VERSION}"; \
-    echo "${DOWNLOADED_VERSION}" > ${VERSION_FILE};
+RUN python3 -m venv ${SERVER_DIR}/venv && \
+    ${SERVER_DIR}/venv/bin/pip install -r ${SERVER_DIR}/scripts/requirements.txt && \
+    export DOWNLOADED_VERSION=$(${SERVER_DIR}/venv/bin/python ${SERVER_DIR}/scripts/download_latest_version.py --dest ${SERVER_DIR} --version "${VERSION}") && \
+    echo "VERSION=${DOWNLOADED_VERSION}" && \
+    echo "${DOWNLOADED_VERSION}" > ${VERSION_FILE}
 
 RUN cp -a ${SERVER_DIR}/allowlist.json ${SERVER_DIR}/defaults/allowlist.json;
 RUN cp -a ${SERVER_DIR}/permissions.json ${SERVER_DIR}/defaults/permissions.json;

@@ -23,11 +23,20 @@ pipeline {
         git branch: 'main', credentialsId: "${githubCredentials}", url: "${gitRepo}"
       }
     }
+    stage('Run Unit Tests') {
+      steps {
+        sh '''
+          python3 -m venv venv
+          ./venv/bin/pip install -r scripts/requirements.txt
+          ./venv/bin/python -m pytest scripts/test_download_latest_version.py
+        '''
+      }
+    }
     stage('Getting Latest Version') {
       steps {
         script {
           if (tag == 'latest') {
-            serverVersion = sh(script: "${WORKSPACE}/scripts/get-latest-version.sh", , returnStdout: true).trim()
+            serverVersion = sh(script: "./venv/bin/python ${WORKSPACE}/scripts/download_latest_version.py --get-version-only", returnStdout: true).trim()
           }
           else {
             serverVersion = tag

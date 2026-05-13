@@ -20,3 +20,9 @@ kingdom/
 caves/
 lush/
 cliffs/
+
+venv/
+scripts/__pycache__/
+__pycache__/
+.pytest_cache/
+output.txt

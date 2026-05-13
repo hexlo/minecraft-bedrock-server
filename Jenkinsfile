@@ -1,3 +1,7 @@
+def dockerhubImage = ''
+def githubImage = ''
+def serverVersion = ''
+
 pipeline {
   environment {
     userName = "hexlo"
@@ -10,11 +14,6 @@ pipeline {
     dockerhubCredentials = 'DOCKERHUB_TOKEN'
     githubCredentials = 'GITHUB_TOKEN'
     jenkins_email = credentials('RUNX_EMAIL')
-    
-    dockerhubImage = ''
-    githubImage = ''
-    
-    serverVersion = ''
   }
   agent any
   stages {
@@ -34,12 +33,12 @@ pipeline {
       steps {
         script {
           if (tag == 'latest') {
-            env.serverVersion = sh(script: "python3 ${WORKSPACE}/scripts/download_latest_version.py --get-version-only", returnStdout: true).trim()
+            serverVersion = sh(script: "python3 ${WORKSPACE}/scripts/download_latest_version.py --get-version-only", returnStdout: true).trim()
           }
           else {
-            env.serverVersion = tag
+            serverVersion = tag
           }
-          echo "serverVersion=${env.serverVersion}"
+          echo "serverVersion=${serverVersion}"
         }
       }
     }

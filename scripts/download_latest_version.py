@@ -3,19 +3,21 @@
 import argparse
 import sys
 import os
-import requests
+import urllib.request
+import urllib.error
+import json
 import zipfile
 import re
 
 MOJANG_API_URL = "https://net-secondary.web.minecraft-services.net/api/v1.0/download/links"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"
 
 def get_latest_version_url():
     """Fetches the latest Minecraft Bedrock Dedicated Server URL for Linux from the Mojang API."""
     try:
-        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"}
-        response = requests.get(MOJANG_API_URL, headers=headers, timeout=10)
-        response.raise_for_status()
-        data = response.json()
+        req = urllib.request.Request(MOJANG_API_URL, headers={"User-Agent": USER_AGENT})
+        with urllib.request.urlopen(req, timeout=10) as response:
+            data = json.loads(response.read().decode())
         
         for link_info in data.get("result", {}).get("links", []):
             if link_info.get("downloadType") == "serverBedrockLinux":
@@ -41,11 +43,12 @@ def download_and_extract(url, dest_dir):
     
     print(f"Downloading {url}...", file=sys.stderr)
     try:
-        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"}
-        response = requests.get(url, stream=True, headers=headers, timeout=120)
-        response.raise_for_status()
-        with open(zip_path, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=8192):
+        req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        with urllib.request.urlopen(req, timeout=120) as response, open(zip_path, 'wb') as f:
+            while True:
+                chunk = response.read(8192)
+                if not chunk:
+                    break
                 f.write(chunk)
     except Exception as e:
         print(f"Error downloading the server: {e}", file=sys.stderr)

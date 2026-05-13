@@ -26,9 +26,7 @@ pipeline {
     stage('Run Unit Tests') {
       steps {
         sh '''
-          python3 -m venv venv
-          ./venv/bin/pip install -r scripts/requirements.txt
-          ./venv/bin/python -m pytest scripts/test_download_latest_version.py
+          PYTHONPATH=scripts python3 -m unittest scripts/test_download_latest_version.py
         '''
       }
     }
@@ -36,7 +34,7 @@ pipeline {
       steps {
         script {
           if (tag == 'latest') {
-            serverVersion = sh(script: "./venv/bin/python ${WORKSPACE}/scripts/download_latest_version.py --get-version-only", returnStdout: true).trim()
+            serverVersion = sh(script: "python3 ${WORKSPACE}/scripts/download_latest_version.py --get-version-only", returnStdout: true).trim()
           }
           else {
             serverVersion = tag
